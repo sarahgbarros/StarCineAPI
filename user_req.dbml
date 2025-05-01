@@ -9,8 +9,7 @@ Table Usuario [headercolor: #FFD700] {
     email char
     senha char
     nome char
-    foto binary [note: 'JPEG image']
-    tipo_usuario char [note: 'admin ou usuario']
+    foto binary [note: 'JPEG image'] 
 }
 
 Table TipoUsuario [headercolor: #FFD700] {
