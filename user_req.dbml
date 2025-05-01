@@ -1,0 +1,54 @@
+Table Usuario [headercolor: #FFD700] {
+    id int [pk]
+    username char
+    email char
+    senha char
+    nome char
+    foto binary [note: 'JPEG image']
+}
+
+Table CategoriaMidia [headercolor: #20B2AA] {
+    id int [pk]
+    nome char
+}
+
+Table Midia [headercolor: #20B2AA] {
+    id int [pk]
+    categoria int [ref: > CategoriaMidia.id]
+    titulo char
+    sinopse char
+    genero char
+    data_lancamento date
+    duracao int [note: 'em minutos']
+    classificacao char
+    producao_midia int [ref: > ProducaoMidia.id]
+    capa binary [note: 'JPEG image']
+}
+
+Table ProducaoMidia [headercolor: #20B2AA] {
+    id int [pk]
+    ator char
+    diretor char
+    estudio char
+}
+
+Table Avaliacao [headercolor: #F08080] {
+    id int [pk]
+    nota int
+    comentario_resenha char
+    usuario int [ref: > Usuario.id]
+    midia int [ref: > Midia.id]
+}
+
+Table CategoriaLista [headercolor: #90EE90] {
+    id int [pk]
+    nome char
+}
+
+Table Lista [headercolor: #90EE90] {
+    id int [pk]
+    categoria int [ref: > CategoriaLista.id]
+    midia int [ref: > Midia.id]
+    usuario int [ref: > Usuario.id]
+}
+
