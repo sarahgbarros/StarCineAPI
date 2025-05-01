@@ -1,3 +1,8 @@
+Table Tipo [headercolor: #FFD700] {
+    id int [pk, increment]
+    nome char
+}
+
 Table Usuario [headercolor: #FFD700] {
     id int [pk]
     username char
@@ -5,6 +10,13 @@ Table Usuario [headercolor: #FFD700] {
     senha char
     nome char
     foto binary [note: 'JPEG image']
+    tipo_usuario char [note: 'admin ou usuario']
+}
+
+Table TipoUsuario [headercolor: #FFD700] {
+    id int [pk, increment]
+    usuario_id int [ref: > Usuario.id]
+    tipo_id int [ref: > Tipo.id]
 }
 
 Table CategoriaMidia [headercolor: #20B2AA] {
