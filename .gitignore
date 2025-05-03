@@ -1,3 +1,6 @@
 # Ignore virtual environment folder
 venv/
 echo ".env" >> .gitignore
+
+# Ignore environment variables file
+.env
