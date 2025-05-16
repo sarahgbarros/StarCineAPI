@@ -9,7 +9,8 @@ Table Usuario [headercolor: #FFD700] {
     email char
     senha char
     nome char
-    foto binary [note: 'JPEG image'] 
+    foto binary [note: 'JPEG image']
+    created_at datetime [default: `now()`]
 }
 
 Table TipoUsuario [headercolor: #FFD700] {
@@ -38,7 +39,7 @@ Table Midia [headercolor: #20B2AA] {
 
 Table ProducaoMidia [headercolor: #20B2AA] {
     id int [pk]
-    ator char
+    ator array [note: 'Lista de atores']
     diretor char
     estudio char
 }
