@@ -1,3 +1,71 @@
-from django.shortcuts import render
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Media, MediaCategory, MediaProduction
+from rest_framework.views import APIView
 
-# Create your views here.
+
+class SaveMedia(APIView):
+
+    def get_category(self, category):
+        try:
+            category_obj = MediaCategory.objects.get(name__iexact=category)
+            return category_obj
+        except:
+            return 'Category not in Db'
+    
+    def save_productionIn_db(self, actors, director, studio):
+        try:
+            production_obj = MediaProduction.objects.get(actor=actors, director=director, studio=studio)
+        except:
+            MediaProduction.objects.create(actor=actors, director=director, studio=studio)
+            production_obj = MediaProduction.objects.get(actor=actors, director=director, studio=studio)
+        return production_obj
+
+    def post(self, request):
+
+        if request.method == 'POST':
+
+            for data in request.data:
+                actors = data['actors']
+                diretor = data['director']
+                studio = data['studio']
+                title = data['title']
+                synopsis = data['synopsis']
+                release_date = data['release_date']
+                category = data['category']
+                classification = data['classification']
+                duration = data['duration']
+                genres = data['genres']
+                cover = data['cover']
+
+                category_obj = self.get_category(category=category)
+                production_obj = self.save_productionIn_db(actors=actors, director=diretor, studio=studio)
+
+                if not Media.objects.filter(title=title, category=category_obj, release_date=release_date).exists():
+                    Media.objects.create(  
+                        title=title, synopsis=synopsis,
+                        release_date=release_date,
+                        category=category_obj,
+                        classification=classification,
+                        duration=duration,
+                        genres=genres,
+                        cover=cover,
+                        production=production_obj)
+                    
+                else:
+                    continue
+
+            return Response({'message': 'CREATED'}, status=status.HTTP_201_CREATED)
+            
+        else:
+
+            return Response({'messge': 'ERROR'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+
+
+
+
+
+
+
