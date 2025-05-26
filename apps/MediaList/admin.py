@@ -17,8 +17,8 @@ class MediaCategoryList(admin.ModelAdmin):
 
 @admin.register(MediaProduction)
 class MediaProductionList(admin.ModelAdmin):
-    list_display = ('actor', 'director', 'studio')
-    list_filter = ('actor', 'director', 'studio')
+    list_display = ('director', 'studio')
+    list_filter = ('director', 'studio')
     list_per_page = 100
 
 
