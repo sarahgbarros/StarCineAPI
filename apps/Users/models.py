@@ -15,7 +15,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
-
     name = models.CharField(max_length=255, blank=True)
     photo = models.ImageField(upload_to='user_profile_photo/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -24,7 +23,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     user_type = models.ForeignKey(TypeUser, on_delete=models.CASCADE, related_name='users')
     
     USERNAME_FIELD = 'username'
-    EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = ['email']
     
     def __str__(self):

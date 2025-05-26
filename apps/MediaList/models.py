@@ -5,9 +5,9 @@ class MediaCategory(models.Model):
     
     def __str__(self):
         return self.name
-    
+
 class MediaProduction(models.Model):
-    actor = models.JSONField(max_length=255)
+    actor = models.JSONField(max_length=255, blank=True, null=True)
     director = models.CharField(max_length=255)
     studio = models.CharField(max_length=255)
     
@@ -28,10 +28,22 @@ class Media(models.Model):
         ('16', 'Não recomendado para menores de 16 anos'),
         ('18', 'Não recomendado para menores de 18 anos'),
     ])
-    duration = models.IntegerField()
+    duration = models.CharField(max_length=50)
     genres = models.CharField(max_length=125)
     cover = models.ImageField(upload_to='media_cover/', blank=True, null=True)
 
     def __str__(self):
         return self.title
+    
+class MediaByActor(models.Model):
+    actor = models.JSONField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
+    synopsis = models.TextField()
+    release_date = models.DateField()
+    classification = models.CharField(max_length=50)
+    genres = models.CharField(max_length=125)
+    cover = models.ImageField(upload_to='media_cover/', blank=True, null=True)
 
+    class Meta:
+        managed = False  
+        db_table = 'vw_media_actors'

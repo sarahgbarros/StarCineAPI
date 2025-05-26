@@ -1,7 +1,10 @@
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Media, MediaCategory, MediaProduction
+from django.db.models import Q
 from rest_framework.views import APIView
+from .models import Media, MediaCategory, MediaProduction, MediaByActor
+from .serializers import MediaSerializer
+
 
 
 class SaveMedia(APIView):
@@ -13,7 +16,7 @@ class SaveMedia(APIView):
         except:
             return 'Category not in Db'
     
-    def save_productionIn_db(self, actors, director, studio):
+    def save_production_in_db(self, actors, director, studio):
         try:
             production_obj = MediaProduction.objects.get(actor=actors, director=director, studio=studio)
         except:
@@ -39,7 +42,7 @@ class SaveMedia(APIView):
                 cover = data['cover']
 
                 category_obj = self.get_category(category=category)
-                production_obj = self.save_productionIn_db(actors=actors, director=diretor, studio=studio)
+                production_obj = self.save_production_in_db(actors=actors, director=diretor, studio=studio)
 
                 if not Media.objects.filter(title=title, category=category_obj, release_date=release_date).exists():
                     Media.objects.create(  
@@ -51,15 +54,68 @@ class SaveMedia(APIView):
                         genres=genres,
                         cover=cover,
                         production=production_obj)
-                    
                 else:
                     continue
 
             return Response({'message': 'CREATED'}, status=status.HTTP_201_CREATED)
             
         else:
+            return Response({'message': 'ERROR'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-            return Response({'messge': 'ERROR'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class SearchMediaByActors(APIView):
+
+    def post(self, request):
+
+        if request.method == 'POST':
+
+            for data in request.data:
+                actors = data['actor']
+
+                if MediaProduction.objects.filter(actor__contains=actors).exists():
+                    actor = MediaProduction.objects.filter(actor__contains=actors).values_list("id", flat=True)
+                    media_by_actor = Media.objects.filter(production__in=actor).all()
+                    serializer = MediaSerializer(media_by_actor, many=True).data
+
+                
+            all_media = []
+            all_media.extend(serializer)
+
+            if all_media:
+                return Response(all_media, status=status.HTTP_200_OK)
+            
+            else:
+                    return Response({'message': 'ERROR'}, status=status.HTTP_404_NOT_FOUND)
+        
+        else:
+            return Response({'message': 'ERROR'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
+class SearchMediaByTitle(APIView):
+
+    def post(self, request):
+
+        for data in request.data:
+            title = data['title']
+
+            if Media.objects.filter(title=title).exists():
+                media = Media.objects.filter(title__iexact=title)
+                serializer = MediaSerializer(media, many=True).data
+
+            all_media = []
+            all_media.extend(serializer)
+
+        if all_media:
+            return Response(all_media, status=status.HTTP_200_OK)
+        
+        else:
+            return Response({'message': 'ERROR'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+    
+
+
+
+
 
 
 
