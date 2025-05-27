@@ -2,7 +2,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework import serializers
@@ -48,3 +48,31 @@ class LoginView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
+class LogoutView(APIView):
+    permission_classes = []  
+    
+    def post(self, request):
+        token_key = request.data.get('token')
+        
+        if not token_key:
+            return Response({
+                'error': 'Token é obrigatório'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            token = Token.objects.get(key=token_key)
+            token.delete()
+            
+            return Response({
+                'message': 'Logout realizado com sucesso'
+            }, status=status.HTTP_200_OK)
+            
+        except Token.DoesNotExist:
+            return Response({
+                'error': 'Token inválido'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                'error': 'Erro interno do servidor'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
