@@ -6,3 +6,5 @@ echo ".env" >> .gitignore
 # Ignore environment variables file
 .env
 
+.pyc
+
