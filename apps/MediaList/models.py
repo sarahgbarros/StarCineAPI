@@ -5,6 +5,9 @@ class MediaCategory(models.Model):
     
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name = 'Media Category'
 
 class MediaProduction(models.Model):
     actor = models.JSONField(max_length=255, blank=True, null=True)
@@ -13,6 +16,9 @@ class MediaProduction(models.Model):
     
     def __str__(self):
         return f'{self.director},{self.actor}'
+
+    class Meta:
+        verbose_name = 'Media Production'
 
 class Media(models.Model):
     title = models.CharField(max_length=255, unique=True)
@@ -35,15 +41,6 @@ class Media(models.Model):
     def __str__(self):
         return self.title
     
-class MediaByActor(models.Model):
-    actor = models.JSONField(max_length=255)
-    title = models.CharField(max_length=255, unique=True)
-    synopsis = models.TextField()
-    release_date = models.DateField()
-    classification = models.CharField(max_length=50)
-    genres = models.CharField(max_length=125)
-    cover = models.ImageField(upload_to='media_cover/', blank=True, null=True)
-
     class Meta:
-        managed = False  
-        db_table = 'vw_media_actors'
+        verbose_name = 'Media'
+    

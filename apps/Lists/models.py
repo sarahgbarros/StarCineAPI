@@ -1,4 +1,6 @@
 from django.db import models
+from apps.MediaList.models import Media
+from apps.Users.models import User
 
 
 
@@ -10,5 +12,5 @@ class ListCategory(models.Model):
     
 class List(models.Model):
     category = models.ForeignKey(ListCategory, on_delete=models.PROTECT)
-    media = models.ForeignKey('MediaList.Media', on_delete=models.PROTECT)
-    user = models.ForeignKey('Users.User', on_delete=models.PROTECT)
+    media = models.ManyToManyField(Media)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)

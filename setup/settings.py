@@ -40,6 +40,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -87,6 +88,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+JAZZMIN_UI_TWEAKS = {
+    "theme": "slate",
+}
 
 WSGI_APPLICATION = 'setup.wsgi.application'
 

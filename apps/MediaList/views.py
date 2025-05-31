@@ -1,6 +1,5 @@
 from rest_framework.response import Response
 from rest_framework import status
-from django.db.models import Q
 from rest_framework.views import APIView
 from .models import Media, MediaCategory, MediaProduction
 from .serializers import MediaSerializer
@@ -57,34 +56,6 @@ class SaveMedia(APIView):
 
         return Response({'message': 'CREATED'}, status=status.HTTP_201_CREATED)
         
-
-
-class SearchMediaByActors(APIView):
-
-    def post(self, request):
-
-        if request.method == 'POST':
-
-            for data in request.data:
-                actors = data['actor']
-
-                if MediaProduction.objects.filter(actor__contains=actors).exists():
-                    actor = MediaProduction.objects.filter(actor__contains=actors).values_list("id", flat=True)
-                    media_by_actor = Media.objects.filter(production__in=actor).all()
-                    serializer = MediaSerializer(media_by_actor, many=True).data
-
-                
-            all_media = []
-            all_media.extend(serializer)
-
-            if all_media:
-                return Response(all_media, status=status.HTTP_200_OK)
-            
-            else:
-                    return Response({'message': 'ERROR'}, status=status.HTTP_404_NOT_FOUND)
-        
-        else:
-            return Response({'message': 'ERROR'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         
 class SearchMediaByTitle(APIView):
 
