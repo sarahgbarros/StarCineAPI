@@ -12,11 +12,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
-import pymysql
 
 import os
 
-pymysql.install_as_MySQLdb()
 load_dotenv()
 
 
@@ -87,7 +85,7 @@ TEMPLATES = [
 ]
 
 JAZZMIN_UI_TWEAKS = {
-    "theme": "slate",
+    "theme": "darkly",
 }
 
 WSGI_APPLICATION = 'setup.wsgi.application'
@@ -98,12 +96,12 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('DB_PORT', '3306'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'star_cine',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': '172.30.76.33',
+        'PORT': '5432',
     }
 }
 

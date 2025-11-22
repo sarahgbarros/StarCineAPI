@@ -5,19 +5,17 @@ ENV PYTHONUNBUFFERED=1
 
 RUN apt-get update && apt-get install -y \
     gcc \
-    default-libmysqlclient-dev \
-    pkg-config \
+    postgresql-client \
+    libpq-dev \
     build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-
 WORKDIR /app
+
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . /app/
 
-
-RUN pip install --upgrade pip && pip install -r requirements.txt
-
 CMD ["gunicorn", "setup.wsgi:application", "--bind", "0.0.0.0:8000"]
-
