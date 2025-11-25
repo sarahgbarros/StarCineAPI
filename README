@@ -109,4 +109,4 @@ URL: http://localhost:8000/api/redoc/
 
 Arquivo YAML/JSON puro descrevendo a API (útil para importar no Postman).
 
-URL: http://localhost:8000/api/schema/
+URL: http://localhost:8000/api/swagger-json/
